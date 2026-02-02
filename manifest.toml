@@ -36,5 +36,9 @@ ram.runtime = "150M"
     default = "visitors"
 
     [install.port]
-    type = "port"
+    name = "port"
+    type = "number"
+    ask.en = "Internal port"
     default = 8181
+    min = 1024
+    max = 65535
