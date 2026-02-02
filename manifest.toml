@@ -1,0 +1,40 @@
+packaging_format = 2
+
+id = "tautulli"
+name = "Tautulli"
+description.en = "Monitor, analytics, and notifications for Plex Media Server"
+version = "2.14.6~ynh1"
+
+maintainers = []
+
+[upstream]
+license = "GPL-3.0-only"
+website = "https://tautulli.com"
+admindoc = "https://github.com/Tautulli/Tautulli/wiki"
+code = "https://github.com/Tautulli/Tautulli"
+
+[integration]
+yunohost = ">= 11.2"
+architectures = ["amd64", "arm64"]
+multi_instance = true
+ldap = false
+sso = false
+disk = "300M"
+ram.build = "50M"
+ram.runtime = "150M"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/tautulli"
+
+    [install.init_main_permission]
+    type = "group"
+    default = "visitors"
+
+    [install.port]
+    type = "port"
+    default = 8181

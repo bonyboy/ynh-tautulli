@@ -1,0 +1,42 @@
+#!/bin/bash
+set -eu
+
+source /usr/share/yunohost/helpers
+
+app=tautulli
+
+ynh_script_progression --message="Storing settings..."
+ynh_app_setting_set --app=$app --key=port --value=$port
+
+ynh_script_progression --message="Installing dependencies..."
+ynh_install_app_dependencies \
+  python3 python3-venv python3-dev git ffmpeg
+
+ynh_script_progression --message="Creating system user..."
+ynh_system_user_create --username=$app
+
+ynh_script_progression --message="Creating directories..."
+ynh_app_setup_workdir
+ynh_app_setup_data_dir
+
+ynh_script_progression --message="Downloading Tautulli..."
+ynh_setup_source \
+  --dest_dir="$install_dir/tautulli" \
+  --source_url="https://github.com/Tautulli/Tautulli/archive/refs/tags/v2.14.6.tar.gz"
+
+ynh_script_progression --message="Installing Python environment..."
+python3 -m venv "$install_dir/venv"
+"$install_dir/venv/bin/pip" install --upgrade pip
+"$install_dir/venv/bin/pip" install -r "$install_dir/tautulli/requirements.txt"
+
+ynh_script_progression --message="Installing service..."
+ynh_add_systemd_config
+ynh_systemd_action --service_name=$app --action=start
+
+ynh_script_progression --message="Configuring NGINX..."
+ynh_add_nginx_config
+
+ynh_script_progression --message="Setting permissions..."
+ynh_fix_app_permissions
+
+ynh_script_progression --message="Installation complete."

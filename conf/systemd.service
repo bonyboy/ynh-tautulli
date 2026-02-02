@@ -1,0 +1,18 @@
+[Unit]
+Description=Tautulli
+After=network.target
+
+[Service]
+Type=simple
+User=__APP__
+Group=__APP__
+WorkingDirectory=__INSTALL_DIR__/tautulli
+ExecStart=/usr/bin/python3 Tautulli.py \
+  --datadir __DATA_DIR__ \
+  --config __DATA_DIR__/config.ini \
+  --port __PORT__
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
